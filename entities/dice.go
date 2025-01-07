@@ -9,8 +9,8 @@ import (
 
 type Dice struct {
 	*Sprite
+	Sides           []int
 	Val             int
-	IsPressed       bool
 	DiceSpriteSheet *spritesheet.Spritesheet
 }
 
@@ -32,6 +32,7 @@ func DefaultDice() *Dice {
 			X:   0,
 			Y:   0,
 		},
+		Sides:           []int{1, 2, 3, 4, 5, 6},
 		DiceSpriteSheet: spritesheet.NewSpriteSheet(6, 1, 64),
 	}
 }
