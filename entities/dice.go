@@ -15,10 +15,14 @@ type Dice struct {
 }
 
 type MyDices struct {
-	SnackLadderDice []Dice
-	FriendlyDice    []Dice
-	EnemyDice       []Dice
-	RewardDice      []Dice
+	SnackLadderDice       []Dice
+	SnackLadderDiceChange int
+	FriendlyDice          []Dice
+	FriendlyDiceChange    int
+	EnemyDice             []Dice
+	EnemyDiceChange       int
+	RewardDice            []Dice
+	RewardDiceChange      int
 }
 
 func DefaultDice() *Dice {
@@ -34,14 +38,5 @@ func DefaultDice() *Dice {
 		},
 		Sides:           []int{1, 2, 3, 4, 5, 6},
 		DiceSpriteSheet: spritesheet.NewSpriteSheet(6, 1, 64),
-	}
-}
-
-func NewDices() *MyDices {
-	return &MyDices{
-		SnackLadderDice: make([]Dice, 0),
-		FriendlyDice:    make([]Dice, 0),
-		EnemyDice:       make([]Dice, 0),
-		RewardDice:      make([]Dice, 0),
 	}
 }

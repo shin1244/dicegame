@@ -8,15 +8,19 @@ import (
 )
 
 func (g *Game) Update() error {
-	g.RollDice()
+	g.DiceManager.HandleInput()
+	if g.Phase == 0 {
+		g.SnakeLadderPhaseUpdate()
+	}
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{120, 180, 255, 255})
-	g.SnackLadderPhase.SnLPhaseDraw(screen)
-	g.drawDices(screen)
-
+	if g.Phase == 0 {
+		g.SnakeLadderPhaseDraw(screen)
+	}
+	g.DiceManager.Draw(screen)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
