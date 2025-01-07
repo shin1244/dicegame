@@ -8,6 +8,7 @@ type Game struct {
 	SnackLadderPhase *SnakeLadder
 	DiceManager      *game.DiceManager
 	Phase            uint
+	Gold             int
 }
 
 func NewGame() *Game {
@@ -16,10 +17,11 @@ func NewGame() *Game {
 		SnackLadderPhase: NewSnakeLadderPhase(diceManager),
 		DiceManager:      diceManager,
 		Phase:            0,
+		Gold:             0,
 	}
 }
 
-func resetDiceChance(diceChance []int, diceChance2 *[]int) {
-	*diceChance2 = make([]int, len(diceChance))
-	copy(*diceChance2, diceChance)
+func resetDiceChance(setDiceChance []uint, diceChance *[]uint) {
+	*diceChance = make([]uint, len(setDiceChance))
+	copy(*diceChance, setDiceChance)
 }

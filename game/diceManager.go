@@ -22,23 +22,19 @@ type DiceManager struct {
 func NewDiceManager() *DiceManager {
 	dm := &DiceManager{
 		MyDices: entities.MyDices{
-			SnackLadderDice:       make([]entities.Dice, 0),
-			SnackLadderDiceChange: 0,
-			FriendlyDice:          make([]entities.Dice, 0),
-			FriendlyDiceChange:    0,
-			EnemyDice:             make([]entities.Dice, 0),
-			EnemyDiceChange:       0,
-			RewardDice:            make([]entities.Dice, 0),
-			RewardDiceChange:      0,
+			SnackLadderDice: make([]entities.Dice, 0),
+			FriendlyDice:    make([]entities.Dice, 0),
+			EnemyDice:       make([]entities.Dice, 0),
+			RewardDice:      make([]entities.Dice, 0),
 		},
 		SelectedDices: -1,
 	}
 
 	// 초기 주사위 설정
-	dm.MyDices.SnackLadderDice = append(dm.MyDices.SnackLadderDice, *entities.DefaultDice())
-	dm.MyDices.FriendlyDice = append(dm.MyDices.FriendlyDice, *entities.DefaultDice(), *entities.DefaultDice())
-	dm.MyDices.EnemyDice = append(dm.MyDices.EnemyDice, *entities.DefaultDice(), *entities.DefaultDice())
-	dm.MyDices.RewardDice = append(dm.MyDices.RewardDice, *entities.DefaultDice())
+	dm.MyDices.SnackLadderDice = append(dm.MyDices.SnackLadderDice, *entities.Dice456())
+	dm.MyDices.FriendlyDice = append(dm.MyDices.FriendlyDice, *entities.DiceDefault(), *entities.DiceDefault())
+	dm.MyDices.EnemyDice = append(dm.MyDices.EnemyDice, *entities.DiceDefault(), *entities.DiceDefault())
+	dm.MyDices.RewardDice = append(dm.MyDices.RewardDice, *entities.DiceDefault())
 
 	return dm
 }
@@ -132,7 +128,8 @@ func (dm *DiceManager) Clicked() {
 
 	// 선택된 주사위 돌리기
 	for i := range *dices {
-		(*dices)[i].Val = rand.Intn(6)
+		val := (*dices)[i].Sides[rand.Intn(len((*dices)[i].Sides))]
+		(*dices)[i].Val = val - 1 // 스프라이트시트 인덱스는 0부터 시작하므로 1을 빼줌
 		(*dices)[i].X = float64(mouseX) - DiceStartX
 		(*dices)[i].Y = float64(mouseY) - DiceStartY*float64(dm.SelectedDices)
 	}

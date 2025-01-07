@@ -8,12 +8,12 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-var SnakeLadderPhaseChance []int = []int{1, 0, 0, 0}
+var SnakeLadderPhaseChance []uint = []uint{1, 0, 0, 0}
 
 type SnakeLadder struct {
 	Player     *entities.Player
 	Tilemap    [10][10]tile.Tile
-	DiceChance []int
+	DiceChance []uint
 }
 
 func (g *Game) SnakeLadderPhaseUpdate() {

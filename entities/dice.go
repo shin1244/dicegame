@@ -4,6 +4,7 @@ import (
 	"dice-game/spritesheet"
 	"log"
 
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
@@ -14,29 +15,35 @@ type Dice struct {
 	DiceSpriteSheet *spritesheet.Spritesheet
 }
 
-type MyDices struct {
-	SnackLadderDice       []Dice
-	SnackLadderDiceChange int
-	FriendlyDice          []Dice
-	FriendlyDiceChange    int
-	EnemyDice             []Dice
-	EnemyDiceChange       int
-	RewardDice            []Dice
-	RewardDiceChange      int
-}
+var diceImg *ebiten.Image
 
-func DefaultDice() *Dice {
-	diceImg, _, err := ebitenutil.NewImageFromFile("assets/images/Dice64.png")
+func init() {
+	var err error
+	diceImg, _, err = ebitenutil.NewImageFromFile("assets/images/Dice64.png")
 	if err != nil {
 		log.Fatal("이미지 불러오기 오류")
 	}
+}
+
+type MyDices struct {
+	SnackLadderDice []Dice
+	FriendlyDice    []Dice
+	EnemyDice       []Dice
+	RewardDice      []Dice
+}
+
+func DiceDefault() *Dice {
 	return &Dice{
-		Sprite: &Sprite{
-			Img: diceImg,
-			X:   0,
-			Y:   0,
-		},
+		Sprite:          &Sprite{Img: diceImg},
 		Sides:           []int{1, 2, 3, 4, 5, 6},
+		DiceSpriteSheet: spritesheet.NewSpriteSheet(6, 1, 64),
+	}
+}
+
+func Dice456() *Dice {
+	return &Dice{
+		Sprite:          &Sprite{Img: diceImg},
+		Sides:           []int{4, 5, 6, 4, 5, 6},
 		DiceSpriteSheet: spritesheet.NewSpriteSheet(6, 1, 64),
 	}
 }
