@@ -1,8 +1,6 @@
 package main
 
 import (
-	"dice-game/game"
-
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -18,6 +16,6 @@ func (g *Game) BattlePhaseUpdate() {}
 
 func (g *Game) BattlePhaseDraw(screen *ebiten.Image) {}
 
-func NewBattlePhase(diceManager *game.DiceManager) *Battle {
+func NewBattlePhase() *Battle {
 	return &Battle{}
 }

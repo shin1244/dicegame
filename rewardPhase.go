@@ -1,8 +1,6 @@
 package main
 
 import (
-	"dice-game/game"
-
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -19,6 +17,6 @@ func (g *Game) RewardPhaseUpdate() {}
 
 func (g *Game) RewardPhaseDraw(screen *ebiten.Image) {}
 
-func NewRewardPhase(diceManager *game.DiceManager) *Reward {
+func NewRewardPhase() *Reward {
 	return &Reward{}
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"dice-game/entities"
-	"dice-game/game"
 	"dice-game/tile"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -73,7 +72,7 @@ func (g *Game) SnakeLadderPhaseDraw(screen *ebiten.Image) {
 	)
 }
 
-func NewSnakeLadderPhase(diceManager *game.DiceManager) *SnakeLadder {
+func NewSnakeLadderPhase() *SnakeLadder {
 	return &SnakeLadder{
 		Player:  entities.NewPlayer(),
 		Tilemap: tile.NewTileMap(),

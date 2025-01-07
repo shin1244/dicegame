@@ -1,21 +1,16 @@
 package main
 
-import (
-	"dice-game/game"
-)
-
 type Game struct {
 	SnackLadderPhase *SnakeLadder
-	DiceManager      *game.DiceManager
+	DiceManager      *DiceManager
 	Phase            uint
 	Gold             int
 }
 
 func NewGame() *Game {
-	diceManager := game.NewDiceManager()
 	return &Game{
-		SnackLadderPhase: NewSnakeLadderPhase(diceManager),
-		DiceManager:      diceManager,
+		SnackLadderPhase: NewSnakeLadderPhase(),
+		DiceManager:      NewDiceManager(),
 		Phase:            0,
 		Gold:             0,
 	}
