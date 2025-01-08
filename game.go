@@ -38,12 +38,23 @@ func (g *Game) GameOver() {
 }
 
 func (g *Game) DrawStatusBar(screen *ebiten.Image) {
+	statusBar := createStatusBar()
+	drawStatusBar(screen, statusBar)
+	drawStatusText(screen, g.Gold, g.Life)
+}
+
+func createStatusBar() *ebiten.Image {
 	statusBar := ebiten.NewImage(960, 64)
 	statusBar.Fill(colornames.Gray)
+	return statusBar
+}
 
+func drawStatusBar(screen, statusBar *ebiten.Image) {
 	opt := &ebiten.DrawImageOptions{}
 	screen.DrawImage(statusBar, opt)
+}
 
-	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("Gold: %d", g.Gold), 20, 20)
-	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("Life: %d", g.Life), 20, 50)
+func drawStatusText(screen *ebiten.Image, gold int, life uint) {
+	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("Gold: %d", gold), 20, 20)
+	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("Life: %d", life), 20, 50)
 }

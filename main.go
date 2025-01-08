@@ -10,11 +10,13 @@ import (
 func (g *Game) Update() error {
 	g.GameOver()
 	g.DiceManager.HandleInput()
-	if g.Phase == 0 {
+
+	switch g.Phase {
+	case 0:
 		g.SnakeLadderPhaseUpdate()
-	} else if g.Phase == 1 {
+	case 1:
 		g.BattlePhaseUpdate()
-	} else if g.Phase == 2 {
+	case 2:
 		g.RewardPhaseUpdate()
 	}
 	return nil
@@ -22,13 +24,12 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{120, 180, 255, 255})
-
-	// 상태창 그리기
 	g.DrawStatusBar(screen)
 
-	if g.Phase == 0 {
+	switch g.Phase {
+	case 0:
 		g.SnakeLadderPhaseDraw(screen)
-	} else if g.Phase == 1 {
+	case 1:
 		g.BattlePhaseDraw(screen)
 	}
 	g.DiceManager.Draw(screen)

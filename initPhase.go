@@ -20,7 +20,7 @@ func (g *Game) initSnakeLadderPhase() {
 func (g *Game) initRewardPhase(win bool) {
 	initDiceChance(RewardPhaseChance, &g.Reward.Chance)
 	if !win {
-		g.Life -= 1
+		g.Life--
 	}
 	g.Phase = 2
 }

@@ -16,36 +16,48 @@ type SnakeLadder struct {
 }
 
 func (g *Game) SnakeLadderPhaseUpdate() {
-	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) && g.DiceManager.Select != -1 {
-		// 현재 선택한 주사위 기회가 0 이상이면
-		if g.SnackLadder.Chance[g.DiceManager.Select] > 0 {
-			g.DiceManager.Clicked()
-		} else {
-			g.DiceManager.Select = -1
-		}
-	} else if g.DiceManager.Select != -1 {
-		diceVal := g.DiceManager.MyDices.SnackLadderDice[0].Val + 1
-		for i := 0; i < diceVal; i++ {
-			g.SnackLadder.Player.NowIndex++
-			if (g.SnackLadder.Player.NowIndex+1)%10 == 0 {
-				break // 10의 배수에 도달하면 멈춤
-			}
-		}
-		g.DiceManager.NotClicked()
-		g.SnackLadder.Chance[0] -= 1
-	}
-	if g.SnackLadder.Chance[0] == 0 {
-		playerIdx := g.SnackLadder.Player.NowIndex
-		x, y := ebiten.CursorPosition()
-		tileX := g.SnackLadder.Tilemap[playerIdx/10][playerIdx%10].X
-		tileY := g.SnackLadder.Tilemap[playerIdx/10][playerIdx%10].Y
-
-		// 마우스 클릭 이벤트와 타일 영역 체크
+	// 주사위 선택 및 클릭 처리
+	if g.DiceManager.Select != -1 {
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-			if float64(x) >= tileX && float64(x) < tileX+64 &&
-				float64(y) >= tileY && float64(y) < tileY+64 {
-				g.initBattlePhase()
+			if g.SnackLadder.Chance[g.DiceManager.Select] > 0 {
+				g.DiceManager.Clicked()
+			} else {
+				g.DiceManager.Select = -1
 			}
+			return
+		}
+
+		// 주사위 결과 처리
+		diceVal := g.DiceManager.MyDices.SnackLadderDice[0].Val + 1
+		movePlayer(g.SnackLadder.Player, diceVal)
+		g.DiceManager.NotClicked()
+		g.SnackLadder.Chance[0]--
+	}
+
+	// 타일 클릭 처리
+	if g.SnackLadder.Chance[0] == 0 {
+		handleTileClick(g)
+	}
+}
+
+func movePlayer(player *entities.Player, steps int) {
+	for i := 0; i < steps; i++ {
+		player.NowIndex++
+		if (player.NowIndex+1)%10 == 0 {
+			break // 10의 배수에 도달하면 멈춤
+		}
+	}
+}
+
+func handleTileClick(g *Game) {
+	playerIdx := g.SnackLadder.Player.NowIndex
+	x, y := ebiten.CursorPosition()
+	tile := g.SnackLadder.Tilemap[playerIdx/10][playerIdx%10]
+
+	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+		if float64(x) >= tile.X && float64(x) < tile.X+64 &&
+			float64(y) >= tile.Y && float64(y) < tile.Y+64 {
+			g.initBattlePhase()
 		}
 	}
 }
