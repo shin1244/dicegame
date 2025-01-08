@@ -8,9 +8,12 @@ import (
 )
 
 func (g *Game) Update() error {
+	g.GameOver()
 	g.DiceManager.HandleInput()
 	if g.Phase == 0 {
 		g.SnakeLadderPhaseUpdate()
+	} else if g.Phase == 1 {
+		g.BattlePhaseUpdate()
 	}
 	return nil
 }
@@ -33,6 +36,7 @@ func main() {
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
 	g := NewGame()
+	g.SnackLadderPhase.DiceChance = []uint{1, 0, 0, 0}
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal("게임 실행 불가")
 	}
