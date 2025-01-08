@@ -3,7 +3,6 @@ package main
 import (
 	"dice-game/entities"
 	"dice-game/tile"
-	"fmt"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -11,34 +10,35 @@ import (
 var SnakeLadderPhaseChance []uint = []uint{1, 0, 0, 0}
 
 type SnakeLadder struct {
-	Player     *entities.Player
-	Tilemap    [10][10]tile.Tile
-	DiceChance []uint
+	Player  *entities.Player
+	Tilemap [10][10]tile.Tile
+	Chance  []uint
 }
 
 func (g *Game) SnakeLadderPhaseUpdate() {
-	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) && g.DiceManager.SelectedDices != -1 {
-		if g.SnackLadderPhase.DiceChance[g.DiceManager.SelectedDices] > 0 {
+	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) && g.DiceManager.Select != -1 {
+		// 현재 선택한 주사위 기회가 0 이상이면
+		if g.SnackLadder.Chance[g.DiceManager.Select] > 0 {
 			g.DiceManager.Clicked()
 		} else {
-			g.DiceManager.SelectedDices = -1
+			g.DiceManager.Select = -1
 		}
-	} else if g.DiceManager.SelectedDices != -1 {
+	} else if g.DiceManager.Select != -1 {
 		diceVal := g.DiceManager.MyDices.SnackLadderDice[0].Val + 1
 		for i := 0; i < diceVal; i++ {
-			g.SnackLadderPhase.Player.NowIndex++
-			if (g.SnackLadderPhase.Player.NowIndex+1)%10 == 0 {
+			g.SnackLadder.Player.NowIndex++
+			if (g.SnackLadder.Player.NowIndex+1)%10 == 0 {
 				break // 10의 배수에 도달하면 멈춤
 			}
 		}
 		g.DiceManager.NotClicked()
-		g.SnackLadderPhase.DiceChance[0] -= 1
+		g.SnackLadder.Chance[0] -= 1
 	}
-	if g.SnackLadderPhase.DiceChance[0] == 0 {
-		playerIdx := g.SnackLadderPhase.Player.NowIndex
+	if g.SnackLadder.Chance[0] == 0 {
+		playerIdx := g.SnackLadder.Player.NowIndex
 		x, y := ebiten.CursorPosition()
-		tileX := g.SnackLadderPhase.Tilemap[playerIdx/10][playerIdx%10].X
-		tileY := g.SnackLadderPhase.Tilemap[playerIdx/10][playerIdx%10].Y
+		tileX := g.SnackLadder.Tilemap[playerIdx/10][playerIdx%10].X
+		tileY := g.SnackLadder.Tilemap[playerIdx/10][playerIdx%10].Y
 
 		// 마우스 클릭 이벤트와 타일 영역 체크
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
@@ -51,9 +51,8 @@ func (g *Game) SnakeLadderPhaseUpdate() {
 }
 
 func (g *Game) SnakeLadderPhaseDraw(screen *ebiten.Image) {
-	tileMap := g.SnackLadderPhase.Tilemap
-	player := g.SnackLadderPhase.Player
-
+	tileMap := g.SnackLadder.Tilemap
+	player := g.SnackLadder.Player
 	// 타일 그리기
 	for y := 0; y < 10; y++ {
 		for x := 0; x < 10; x++ {
@@ -65,7 +64,6 @@ func (g *Game) SnakeLadderPhaseDraw(screen *ebiten.Image) {
 			screen.DrawImage(tile.Image, tileOpt)
 		}
 	}
-
 	PlayerOpt := &ebiten.DrawImageOptions{}
 	PlayerIdx := player.NowIndex
 	PlayerOpt.GeoM.Translate(tileMap[PlayerIdx/10][PlayerIdx%10].X, tileMap[PlayerIdx/10][PlayerIdx%10].Y)
@@ -95,20 +93,7 @@ func (s *SnakeLadder) InitializeTilePositions() {
 			}
 
 			s.Tilemap[y][x].X = float64(0 + drawX*64)
-			s.Tilemap[y][x].Y = float64(0 + (9-y)*64)
+			s.Tilemap[y][x].Y = float64(64 + (9-y)*64)
 		}
-	}
-}
-
-func (g *Game) initSnakeLadderPhase(win bool) {
-	if win {
-		resetDiceChance(SnakeLadderPhaseChance, &g.SnackLadderPhase.DiceChance)
-		g.Phase = 0
-		fmt.Println(g.Life)
-	} else {
-		g.Life -= 1
-		resetDiceChance(SnakeLadderPhaseChance, &g.SnackLadderPhase.DiceChance)
-		g.Phase = 0
-		fmt.Println(g.Life)
 	}
 }
