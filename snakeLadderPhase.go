@@ -10,9 +10,10 @@ import (
 var SnakeLadderPhaseChance []uint = []uint{1, 0, 0, 0}
 
 type SnakeLadder struct {
-	Player  *entities.Player
-	Tilemap [10][10]tile.Tile
-	Chance  []uint
+	Player    *entities.Player
+	Tilemap   [10][10]tile.Tile
+	Chance    []uint
+	CurseTile uint
 }
 
 func (g *Game) SnakeLadderPhaseUpdate() {
@@ -50,13 +51,19 @@ func movePlayer(player *entities.Player, steps int) {
 }
 
 func handleTileClick(g *Game) {
-	playerIdx := g.SnackLadder.Player.NowIndex
 	x, y := ebiten.CursorPosition()
-	tile := g.SnackLadder.Tilemap[playerIdx/10][playerIdx%10]
+	nowTile := tile.NowTile(g.SnackLadder.Tilemap, g.SnackLadder.Player)
 
 	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-		if float64(x) >= tile.X && float64(x) < tile.X+64 &&
-			float64(y) >= tile.Y && float64(y) < tile.Y+64 {
+		if float64(x) >= nowTile.X && float64(x) < nowTile.X+64 &&
+			float64(y) >= nowTile.Y && float64(y) < nowTile.Y+64 {
+			// 저주 타일일 경우
+			if nowTile.Type == 6 {
+				g.Cursed++
+				if g.Cursed >= 10 {
+					g.GameOver()
+				}
+			}
 			g.initBattlePhase()
 		}
 	}

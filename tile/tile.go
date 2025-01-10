@@ -1,6 +1,7 @@
 package tile
 
 import (
+	"dice-game/entities"
 	"log"
 	"math/rand"
 	"os"
@@ -11,7 +12,7 @@ import (
 )
 
 type Tile struct {
-	// 1. 기본 타일 2. 이벤트 타일 3. 상점 타일 4. 중간 보스 타일 5. 최종 보스 타일
+	// 1. 기본 타일 2. 이벤트 타일 3. 상점 타일 4. 중간 보스 타일 5. 최종 보스 타일 6. 저주 타일
 	Type  int
 	Image *ebiten.Image
 	X     float64
@@ -24,6 +25,43 @@ func shuffle(arr []Tile) []Tile {
 		arr[i], arr[j] = arr[j], arr[i]
 	}
 	return arr
+}
+
+var (
+	DefaultTile    Tile
+	EventTile      Tile
+	StoreTile      Tile
+	MiddleBossTile Tile
+	LastBossTile   Tile
+	CursedTile     Tile
+)
+
+func init() {
+	TileHash := loadTileImg()
+	DefaultTile = Tile{
+		Type:  1,
+		Image: TileHash["DefaultTile"],
+	}
+	EventTile = Tile{
+		Type:  2,
+		Image: TileHash["EventTile"],
+	}
+	StoreTile = Tile{
+		Type:  3,
+		Image: TileHash["StoreTile"],
+	}
+	MiddleBossTile = Tile{
+		Type:  4,
+		Image: TileHash["MiddleBossTile"],
+	}
+	LastBossTile = Tile{
+		Type:  5,
+		Image: TileHash["LastBossTile"],
+	}
+	CursedTile = Tile{
+		Type:  6,
+		Image: TileHash["CursedTile"],
+	}
 }
 
 func loadTileImg() map[string]*ebiten.Image {
@@ -54,27 +92,6 @@ func loadTileImg() map[string]*ebiten.Image {
 
 func NewTileMap() [10][10]Tile {
 	Tiles := [10][10]Tile{}
-	TileHash := loadTileImg()
-	DefaultTile := Tile{
-		Type:  1,
-		Image: TileHash["DefaultTile"],
-	}
-	EventTile := Tile{
-		Type:  2,
-		Image: TileHash["EventTile"],
-	}
-	StoreTile := Tile{
-		Type:  3,
-		Image: TileHash["StoreTile"],
-	}
-	MiddleBossTile := Tile{
-		Type:  4,
-		Image: TileHash["MiddleBossTile"],
-	}
-	LastBossTile := Tile{
-		Type:  5,
-		Image: TileHash["LastBossTile"],
-	}
 
 	for idx := range Tiles {
 		Tiles[idx][0] = DefaultTile
@@ -96,4 +113,8 @@ func NewTileMap() [10][10]Tile {
 		}
 	}
 	return Tiles
+}
+
+func NowTile(tileMap [10][10]Tile, player *entities.Player) Tile {
+	return tileMap[player.NowIndex/10][player.NowIndex%10]
 }

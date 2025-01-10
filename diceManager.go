@@ -155,3 +155,7 @@ func (dm *DiceManager) NotClicked() {
 	// 선택된 주사위 초기화
 	dm.Select = -1
 }
+
+func AddDice(diceList *[]entities.Dice, dice entities.Dice) {
+	*diceList = append(*diceList, dice)
+}

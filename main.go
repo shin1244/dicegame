@@ -31,6 +31,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		g.SnakeLadderPhaseDraw(screen)
 	case 1:
 		g.BattlePhaseDraw(screen)
+	case 2:
+		g.RewardPhaseDraw(screen)
 	}
 	g.DiceManager.Draw(screen)
 }
